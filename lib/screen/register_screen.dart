@@ -1,4 +1,4 @@
-import 'package:chat_app/screen/cubit/register_cubit/register_cubit.dart';
+import 'package:chat_app/screen/cubit/auth_cubit/auth_cubit.dart';
 import 'package:chat_app/widget/custom_button.dart';
 import 'package:chat_app/widget/screen_item.dart';
 import 'package:flutter/material.dart';
@@ -20,13 +20,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<RegisterCubit, RegisterState>(
+    return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
-        if (state is LoadingState) {
+        if (state is LoadingRegisterState) {
           CircularProgressIndicator();
-        } else if (state is SuccessState) {
+        } else if (state is SuccessRegisterState) {
           Navigator.pop(context);
-        } else if (state is FailureState) {
+        } else if (state is FailureRegisterState) {
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text(state.errorMessage)));
@@ -53,7 +53,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 text: 'Sign Up',
                 onPressed: () async {
                   if (formKey.currentState!.validate()) {
-                    BlocProvider.of<RegisterCubit>(context).registerUser(
+                    BlocProvider.of<AuthCubit>(context).registerUser(
                       emailAddress: emailAddress!,
                       password: password!,
                     );

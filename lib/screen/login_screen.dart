@@ -1,6 +1,6 @@
 import 'package:chat_app/screen/chat_screen.dart';
-import 'package:chat_app/screen/cubit/login_cubit/login_cubit.dart';
-import 'package:chat_app/screen/cubit/login_cubit/login_state.dart';
+import 'package:chat_app/screen/cubit/auth_cubit/auth_cubit.dart';
+
 import 'package:chat_app/screen/register_screen.dart';
 import 'package:chat_app/widget/custom_button.dart';
 import 'package:chat_app/widget/screen_item.dart';
@@ -23,18 +23,18 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginCubit, LoginState>(
+    return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
-        if (state is LoadingState) {
+        if (state is LoadingLoginState) {
           Center(child: CircularProgressIndicator());
-        } else if (state is SuccessState) {
+        } else if (state is SuccessLoginState) {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => ChatScreen(email: state.email),
             ),
           );
-        } else if (state is FailureState) {
+        } else if (state is FailureLoginState) {
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text(state.errorMessage)));
@@ -61,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 text: 'Login',
                 onPressed: () async {
                   if (formKey.currentState!.validate()) {
-                    BlocProvider.of<LoginCubit>(context).loginUser(
+                    BlocProvider.of<AuthCubit>(context).loginUser(
                       emailAddress: emailAddress!,
                       password: password!,
                     );
