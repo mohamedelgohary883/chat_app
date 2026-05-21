@@ -1,4 +1,4 @@
-import 'package:chat_app/screen/cubit/auth_cubit/auth_cubit.dart';
+import 'package:chat_app/screen/blocs/auth_bloc/auth_bloc.dart';
 import 'package:chat_app/widget/custom_button.dart';
 import 'package:chat_app/widget/screen_item.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +20,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthCubit, AuthState>(
+    return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is LoadingRegisterState) {
           CircularProgressIndicator();
@@ -53,9 +53,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 text: 'Sign Up',
                 onPressed: () async {
                   if (formKey.currentState!.validate()) {
-                    BlocProvider.of<AuthCubit>(context).registerUser(
-                      emailAddress: emailAddress!,
-                      password: password!,
+                    BlocProvider.of<AuthBloc>(context).add(
+                      RegisterEvent(email: emailAddress!, password: password!),
                     );
                   }
                   setState(() {

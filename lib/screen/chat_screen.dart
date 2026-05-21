@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChatScreen extends StatefulWidget {
-  ChatScreen({super.key, required this.email});
-  String email;
+  const ChatScreen({super.key, required this.email});
+  final String email;
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();

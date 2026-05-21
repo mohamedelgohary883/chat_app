@@ -1,5 +1,5 @@
+import 'package:chat_app/screen/blocs/auth_bloc/auth_bloc.dart';
 import 'package:chat_app/screen/chat_screen.dart';
-import 'package:chat_app/screen/cubit/auth_cubit/auth_cubit.dart';
 
 import 'package:chat_app/screen/register_screen.dart';
 import 'package:chat_app/widget/custom_button.dart';
@@ -23,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthCubit, AuthState>(
+    return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is LoadingLoginState) {
           Center(child: CircularProgressIndicator());
@@ -61,9 +61,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 text: 'Login',
                 onPressed: () async {
                   if (formKey.currentState!.validate()) {
-                    BlocProvider.of<AuthCubit>(context).loginUser(
-                      emailAddress: emailAddress!,
-                      password: password!,
+                    BlocProvider.of<AuthBloc>(context).add(
+                      LoginEvent(email: emailAddress!, password: password!),
                     );
                   }
                   setState(() {

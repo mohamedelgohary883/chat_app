@@ -1,6 +1,5 @@
-import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -17,16 +16,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           );
           emit(SuccessLoginState(email: event.email));
         } on FirebaseAuthException catch (e) {
-          if (e.code == 'user-not-found') {
-            emit(
-              FailureLoginState(errorMessage: 'No user found for that email.'),
-            );
-          } else if (e.code == 'wrong-password') {
-            emit(
-              FailureLoginState(
-                errorMessage: 'Wrong password provided for that user.',
-              ),
-            );
+          if (e.code == 'invalid-credential') {
+            emit(FailureLoginState(errorMessage: 'Email or password is wrong'));
+          } else {
+            emit(FailureLoginState(errorMessage: e.message ?? 'Login failed'));
           }
         } catch (e) {
           emit(FailureLoginState(errorMessage: 'some thing went wrong'));
